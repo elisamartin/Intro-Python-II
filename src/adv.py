@@ -1,4 +1,6 @@
+from textwrap3 import wrap
 from room import Room
+from player import Player
 
 # Declare all the rooms
 
@@ -38,14 +40,52 @@ room['treasure'].s_to = room['narrow']
 #
 
 # Make a new player object that is currently in the 'outside' room.
+c_room = room['outside']
+p1 = Player("Player 1", c_room)
+
+
+# def move(dir, current_room):
+#     attribute = dir + '_to'
+#     if hasattr(current_room, attribute):
+#         return getattr(current_room, attribute)
+#     else:
+#         print('you can not go that way')
 
 # Write a loop that:
 #
-# * Prints the current room name
-# * Prints the current description (the textwrap module might be useful here).
-# * Waits for user input and decides what to do.
-#
+while True:
+    #     # * Prints the current room name
+    #     print(room[p1.current_room].name)
+    print(c_room.name)
+#     # * Prints the current description (the textwrap module might be useful here).
+    lines = wrap(c_room.description, 100)
+    for line in lines:
+        print(line)
+#     # * Waits for user input and decides what to do.
+    direction = input("Choose a direction: ")
 # If the user enters a cardinal direction, attempt to move to the room there.
 # Print an error message if the movement isn't allowed.
-#
+    if direction == 'e':
+        if hasattr(c_room, 'e_to'):
+            c_room = c_room.e_to
+        else:
+            print("Can't move East")
+    if direction == 'w':
+        if hasattr(c_room, 'w_to'):
+            c_room = c_room.w_to
+        else:
+            print("Can't move West")
+    if direction == 'n':
+        if hasattr(c_room, 'n_to'):
+            c_room = c_room.n_to
+        else:
+            print("Can't move North")
+    if direction == 's':
+        if hasattr(c_room, 's_to'):
+            c_room = c_room.s_to
+        else:
+            print("Can't move South")
 # If the user enters "q", quit the game.
+    if direction == 'q':
+        print("Bye!")
+        break
