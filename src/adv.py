@@ -18,11 +18,15 @@ into the darkness. Ahead to the north, a light flickers in
 the distance, but there is no way across the chasm.""",[ Item("Rope", "Can be used to climb, if you have the skill"), Item("Doge", "Just a cool dog")]),
 
     'narrow':   Room("Narrow Passage", """The narrow passage bends here from west
-to north. The smell of gold permeates the air."""),
+to north. The smell of gold permeates the air. A narrower passage keeps going to the east."""),
 
     'treasure': Room("Treasure Chamber", """You've found the long-lost treasure
 chamber! Sadly, it has already been completely emptied by
-earlier adventurers. The only exit is to the south.""", [Item('Old moldy chest', "There's treasure inside. TREASURE!")]),
+earlier adventurers. The only exit is to the south.""", [Item("Chest", "Very old and moldy chest... oh wait, there's treasure inside. TREASURE!")]),
+
+    'narrower': Room("Narrower Passage", """This passage keeps getting narrower, looks like there's a tiny opening at the end.""", [Item("Goo", "Sticky sticky goo covers everything.")]),
+
+    'cavern': Room("Gigantic cavern", """The narrower passage opens sudenly to a cavern without other exits. Looks like someone has been here before making potions""", [Item("Cauldron", "Can be used to make potions"), Item("Potions", "Who know what this could do?")])
 }
 
 
@@ -35,7 +39,11 @@ room['foyer'].e_to = room['narrow']
 room['overlook'].s_to = room['foyer']
 room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
+room['narrow'].e_to = room['narrower']
 room['treasure'].s_to = room['narrow']
+room['narrower'].e_to = room['cavern']
+room['narrower'].w_to = room['narrow']
+room['cavern'].w_to = room['narrower']
 
 #
 # Main
@@ -63,7 +71,7 @@ while True:
     if hasattr(c_room, 'items'):
             for item in c_room.items:
                 print(
-                    f'Room contains: {item.name}\n')
+                    f'\nRoom contains: {item.name}')
 #     # * Waits for user input and decides what to do.
     direction = input("\nChoose what to do: ")
     more = direction.split(' ')
@@ -88,6 +96,11 @@ while True:
                 item.on_drop()
                 c_room.items.append(item)
                 print(f"{c_room.name} now has new item: {item.name}\n")
+        else:
+            print(
+                'Command not found.\nPlease try n, s, w, e to move and get, drop to interact with items\n')
+    if len(more) > 2:
+        print('Only 1 and 2 words input please.\nTry n, s, w, e to move and get, drop to interact with items\n')
 # If the user enters a cardinal direction, attempt to move to the room there.
 # Print an error message if the movement isn't allowed.
     if direction == 'e':
