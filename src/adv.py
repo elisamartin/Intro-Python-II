@@ -3,6 +3,7 @@ from room import Room
 from player import Player
 from item import Item
 
+
 # Declare all the rooms
 
 room = {
@@ -42,19 +43,29 @@ room['treasure'].s_to = room['narrow']
 
 # Make a new player object that is currently in the 'outside' room.
 c_room = room['outside']
-p1 = Player("Player 1", c_room, [Item("water", "You know, to drink")])
+p1 = Player("Player 1", c_room, [Item("Water", "You know, to drink")])
 
 # Write a loop that:
 #
+
+print("\n\n*********************************************")
+print("***********  WELCOME TO THE GAME  ***********")
+print("*********************************************\n")
+
 while True:
     #     # * Prints the current room name
-    print(c_room.name)
+    print("\n" + c_room.name)
 #     # * Prints the current description (the textwrap module might be useful here).
     lines = wrap(c_room.description, 100)
     for line in lines:
         print(line)
+
+    if hasattr(c_room, 'items'):
+            for item in c_room.items:
+                print(
+                    f'Room contains: {item.name}\n')
 #     # * Waits for user input and decides what to do.
-    direction = input("Choose what to do: ")
+    direction = input("\nChoose what to do: ")
     more = direction.split(' ')
     if len(more) == 2:
         if more[0] == 'get': 
@@ -65,9 +76,9 @@ while True:
                 c_room.items.remove(item)
                 p1.items.append(item)
                 item.on_get()
-                print(f"{p1.name} now has new item: {item.name}")
+                print(f"{p1.name} now has new item: {item.name}\n")
             else:
-                print(f"Current room doesn't hold item {more[1]}")
+                print(f"Current room doesn't hold item {more[1]}\n")
         if more[0] == 'drop':
             inames = [i.name for i in p1.items]
             if more[1] in inames:
@@ -76,38 +87,43 @@ while True:
                 p1.items.remove(item)
                 item.on_drop()
                 c_room.items.append(item)
-                print(f"{c_room.name} now has new item: {item.name}")
+                print(f"{c_room.name} now has new item: {item.name}\n")
 # If the user enters a cardinal direction, attempt to move to the room there.
 # Print an error message if the movement isn't allowed.
     if direction == 'e':
         if hasattr(c_room, 'e_to'):
             c_room = c_room.e_to
+            print("Going East!")
         else:
-            print("Can't move East")
+            print("Can't move East\n")
     if direction == 'w':
         if hasattr(c_room, 'w_to'):
             c_room = c_room.w_to
+            print("Going West!")
         else:
-            print("Can't move West")
+            print("Can't move West\n")
     if direction == 'n':
         if hasattr(c_room, 'n_to'):
             c_room = c_room.n_to
+            print( "Going North!" )
         else:
-            print("Can't move North")
+            print("Can't move North\n")
     if direction == 's':
         if hasattr(c_room, 's_to'):
             c_room = c_room.s_to
+            print("Going South!")
         else:
-            print("Can't move South")
+            print("Can't move South\n")
 
     if direction == 'i':
+        print('\nChecking inventory...\n')
         if hasattr(p1, 'items'):
             for item in p1.items:
                 print(
-                    f'name: {item.name}  description: {item.description}')          
+                    f'Item: {item.name}. {item.description}.\n')
         else:
-            print("Inventory is empty")
+            print("Inventory is empty\n")
 # If the user enters "q", quit the game.
     if direction == 'q':
-        print("Bye!")
+        print("Thanks for playing\nBye!\n")
         break
