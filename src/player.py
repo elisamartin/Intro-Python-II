@@ -3,9 +3,9 @@
 
 
 class Player:
-    def __init__(self, name, current_room):
+    def __init__(self, name, current_room, items=[]):
         self.name = name
         self.current_room = current_room
-
+        self.items = items
     def __repr__(self):
         return f"{self.name} is in {self.current_room}"
